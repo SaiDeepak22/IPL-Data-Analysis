@@ -1,0 +1,71 @@
+#calling the dataset
+using CSV
+matches = CSV.read("C:\\Users\\saide\\Downloads\\matches.csv")
+
+#using dataframes for the dataset
+using DataFrames
+
+#converting dataset to a particular dataframe of 400 rows
+df=head(matches,400)
+
+typeof(df)
+
+#displays all the names of the dataframe
+names(df)
+
+size(df)
+
+describe(df)
+
+df[df.season .> 2010, :]
+
+df[df.win_by_runs .> df.win_by_wickets, :]
+
+filter(row -> row.season > 2010, df)
+
+ df[(df.win_by_runs .> 5) .& (df.win_by_wickets .< 5), :]
+ 
+ gd = groupby(df, [:season])
+
+df1=head(matches)
+
+df1[!, :sixes] = [259, 272, 350, 218, 155,45] 
+
+df1
+
+rename!(df, :season => :year)
+
+select!(df, Not(:year))
+
+gd = groupby(df, [:year])
+
+using Statistics
+combine(gd, [:win_by_runs] => mean)
+
+sort!(df, [order(:city), order(:season)])
+
+using Statistics
+mean(df.year)
+
+median(df.year)
+
+mode(df.year)
+
+minimum(df.win_by_wickets)
+
+maximum(df.win_by_wickets)
+
+for r in eachrow(df1)
+           println(r) 
+       end
+
+using Plots   
+scatter(df.winner, 
+    df.win_by_wickets, 
+    bg_inside = "grey",
+    title = "winner and win by wickets", 
+    xticks =:all,
+    yticks=0:10,
+    xrotation = 45, 
+    size = [600, 400], 
+    legend =:topleft)
